@@ -2,7 +2,7 @@ pipeline {
   environment {
     imagename = "shockerhub/myrepository"
     registryCredential = 'shockerhub_id'
-    dockerImage = ''
+    dockerImage = 'mydocshockimage'
   }
   agent any
   stages {

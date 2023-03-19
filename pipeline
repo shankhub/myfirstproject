@@ -1,0 +1,33 @@
+pipeline {
+  agent any
+  environment {
+    DOCKER_IMAGE_NAME = 'MyJenkinDeployedImage'
+    DOCKER_REGISTRY = 'https://hub.docker.com/repository/docker/shockerhub/myrepository'
+    GIT_REPO_URL = 'https://github.com/shankhub/myfirstproject.git'
+    GIT_REPO_BRANCH = 'master'
+  }
+  stages {
+    stage('Clone repository') {
+      steps {
+        git branch: "${env.GIT_REPO_BRANCH}", url: "${env.GIT_REPO_URL}"
+      }
+    }
+    stage('Build Docker image') {
+      steps {
+        script {
+          docker.build("${env.DOCKER_REGISTRY}/${env.DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER}")
+        }
+      }
+    }
+    stage('Push Docker image') {
+      steps {
+        script {
+          docker.withRegistry("${env.DOCKER_REGISTRY}", 'shankhub_id') {
+            dockerImage.push("${env.DOCKER_REGISTRY}/${env.DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER}")
+          }
+        }
+      }
+    }
+  }
+}
+
