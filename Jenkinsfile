@@ -14,7 +14,7 @@ pipeline {
     stage('Building image') {
       steps{
         script {
-          dockerImage = docker.build jenkinsdeployedimage
+         sh 'docker build -t shockerhub/mytestimage:latest .' 
         }
       }
     }
